@@ -21,7 +21,12 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-    <title>Document</title>
+    <title>로그인</title>
+<style>
+	.container{min-width:700px;
+	max-width:800px;}
+	
+</style>
 </head>
 <body>
     <div class="container">
@@ -32,12 +37,10 @@
         </div>
         <div class="form-group">
             <span>비밀번호</span>
-            <input class="form-control col-6" name="password" value="" type="text">
+            <input class="form-control col-6" name="password" value="" type="password">
         </div>
-        <button class="btn btn-info">로그인</button><br>
-        <button class="btn mt-2">회원가입</button>
+        <button class="btn btn-info col-6" type=>로그인</button>
+        <button class="btn mt-2 col-6">회원가입</button>
     </div>
-    
-    
 </body>
 </html>

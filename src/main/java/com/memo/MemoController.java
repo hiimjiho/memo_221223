@@ -11,4 +11,9 @@ public class MemoController {
 	public String loginView() {
 		return "test/memoLogin";
 	}
+	
+	@RequestMapping("/sign_up")
+	public String sign_up() {
+		return "test/sign_up";
+	}
 }
