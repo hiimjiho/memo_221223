@@ -28,6 +28,7 @@ public class UserRestController {
 			result.put("code", 1);
 			result.put("result", true);
 		}else {
+			result.put("code", 1);
 			result.put("result", false);
 		}
 		

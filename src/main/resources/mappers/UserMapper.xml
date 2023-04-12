@@ -4,7 +4,13 @@
  <mapper namespace="com.memo.user.dao.UserMapper">
  	<select id="selectUserByloginId" parameterType="String" resultType="com.memo.user.model.User">
  		SELECT
- 			COUNT(*)
+ 			`id`
+ 			, `loginId`
+ 			, `password`
+ 			, `name`
+ 			, `email`
+ 			, `createdAt`
+ 			, `updatedAt`
  		FROM
  			`user`
  		WHERE
