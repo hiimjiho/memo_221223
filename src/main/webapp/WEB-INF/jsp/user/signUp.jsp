@@ -77,11 +77,11 @@
 			});
 		});
 		
-		$("#signUpBtn").on("submit", function(e){
-			//e.preventDefault();	// submit 기능 중단
+		$("#signUpForm").on("submit", function(e){
+			e.preventDefault();	// submit 기능 중단
 			
 			// validation
-			let loginId = $("#loginId").val().trin();
+			let loginId = $("#loginId").val().trim();
 			let password = $("#password").val();
 			let confirmPassword = $("#confirmPassword").val();
 			let name = $("#name").val().trim();
@@ -97,7 +97,7 @@
 				return false;
 			}
 			
-			if(!password != !confirmPassword){
+			if(password != confirmPassword){
 				alert("비밀번호가 일치하지 않습니다.");
 				return false;
 			}
@@ -113,7 +113,7 @@
 			}
 			
 			// 아이디 중복확인 완료됐는지 확인 -> idCheckOk에 d-none이 있으면 얼럿을 띄워야 한다.
-			if($("idCheckOk").hasClass("d-none")){
+			if($("#idCheckOk").hasClass("d-none")){
 				alert("아이디 중복확인을 다시 해주세요.");
 				return false;
 			}
@@ -126,14 +126,14 @@
 			let url = $(this).attr("action");
 			console.log(url);
 			let params = $(this).serialize();	// form 태그에 있는 name 속성 값들로 파라미터 구성
-			console(params);
+			console.log(params);
 			
 			$.post(url, params)	//request
 			.done(function(data) {
 				// response
 				if (data.code == 1) {	// 성공
 					alert("가입을 환영합니다! 로그인을 해주세요.");
-					location.href="/user/sign_in";
+					location.href = "/user/sign_in_view";
 				} else {	// 실패
 					alert(data.errorMessage);
 				}

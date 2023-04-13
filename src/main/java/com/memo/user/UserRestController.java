@@ -56,17 +56,13 @@ public class UserRestController {
 		// 예) aaaa => asfsdfbdfbgdbdfg
 		String hashedPassword = EncryptUtils.md5(password);
 		
-		int countRow = userBO.getUserId(loginId, hashedPassword, name, email);
+		userBO.getUserId(loginId, hashedPassword, name, email);
 		
 		// db insert
 		Map<String, Object> result = new HashMap<>();
-		if(countRow > 0) {
-			result.put("code", 1);
-			result.put("result", "성공");
-		} else {
-			result.put("code", 500);
-			result.put("result", "실패");
-		}
+		
+		result.put("code", 1);
+		result.put("result", "성공");
 		return result;
 	}
 	
