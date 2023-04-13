@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<form id="signUpForm" method="post" action="/user/sign_up">
 <table class="sign-up-table table table-bordered">
 	<tr>
 		<th>* 아이디(4자 이상)<br></th>
@@ -41,6 +42,7 @@
 	</tr>
 </table>
 <button type="submit" class="btn btn-info" id="signUpBtn">회원가입</button>
+</form>
 
 <script>
 	$(document).ready(function(){
@@ -71,6 +73,69 @@
 					} else{
 						$("#idCheckOk").removeClass('d-none');
 					}
+				}
+			});
+		});
+		
+		$("#signUpBtn").on("submit", function(e){
+			//e.preventDefault();	// submit 기능 중단
+			
+			// validation
+			let loginId = $("#loginId").val().trin();
+			let password = $("#password").val();
+			let confirmPassword = $("#confirmPassword").val();
+			let name = $("#name").val().trim();
+			let email = $("#email").val().trim();
+			
+			if(!loginId){
+				alert("아이디를 입력하세요.");
+				return false;
+			}
+			
+			if(!password || !confirmPassword){
+				alert("비밀번호를 입력해주세요");
+				return false;
+			}
+			
+			if(!password != !confirmPassword){
+				alert("비밀번호가 일치하지 않습니다.");
+				return false;
+			}
+			
+			if(!name){
+				alert("이름을 입력해주세요.");
+				return false;
+			}
+			
+			if(!email){
+				alert("이메일을 입력해주세요.");
+				return false;
+			}
+			
+			// 아이디 중복확인 완료됐는지 확인 -> idCheckOk에 d-none이 있으면 얼럿을 띄워야 한다.
+			if($("idCheckOk").hasClass("d-none")){
+				alert("아이디 중복확인을 다시 해주세요.");
+				return false;
+			}
+			
+			// 서버로 보내는 방법
+			// 1) 서브밋
+			//$(this)[0].submit();		일반 컨트롤러(화면이동)
+		
+			// 2) ajax		// restController
+			let url = $(this).attr("action");
+			console.log(url);
+			let params = $(this).serialize();	// form 태그에 있는 name 속성 값들로 파라미터 구성
+			console(params);
+			
+			$.post(url, params)	//request
+			.done(function(data) {
+				// response
+				if (data.code == 1) {	// 성공
+					alert("가입을 환영합니다! 로그인을 해주세요.");
+					location.href="/user/sign_in";
+				} else {	// 실패
+					alert(data.errorMessage);
 				}
 			});
 		});

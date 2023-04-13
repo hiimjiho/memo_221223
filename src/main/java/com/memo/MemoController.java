@@ -14,6 +14,6 @@ public class MemoController {
 	
 	@RequestMapping("/sign_up")
 	public String sign_up() {
-		return "test/sign_up";
+		return "user/sign_up";
 	}
 }
