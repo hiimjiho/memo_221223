@@ -53,7 +53,7 @@ $(document).ready(function(){
 		.done(function(data){
 			if(data.code == 1) {
 				// 로그인 성공시 게시판 목록으로 이동
-				location.href="/post/list_view";
+				location.href="/post/post_list_view";
 			} else{
 				alert(data.errorMessage);
 			}
