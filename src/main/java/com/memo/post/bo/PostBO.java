@@ -34,4 +34,9 @@ public class PostBO {
 	public List<Post> PostList(){
 		return postMapper.selectPostList();
 	}
+	
+	// input:postId, userId			output: post
+	public Post getPostBypostIdUserId(int postId, int userId) {
+		return postMapper.getPostBypostIdUserId(postId, userId);
+	}
 }
