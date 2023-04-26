@@ -1,5 +1,6 @@
 package com.memo.post.bo;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,6 +19,8 @@ public class PostBO {
 	// 자동 임포트되는 mybatis는 반드시 제거해주어야 한다
 	// private Logger logger = LoggerFactory.getLogger(PostBO.class);
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	private static final int POST_MAX_SIZE = 3;
 	
 	@Autowired 
 	private PostMapper postMapper;
@@ -70,9 +73,7 @@ public class PostBO {
 		postMapper.updatePostByPostId(postId, subject, content, imagePath);
 	}
 	
-	public List<Post> PostList(){
-		return postMapper.selectPostList();
-	}
+	
 	
 	// input:postId, userId			output: post
 	public Post getPostBypostIdUserId(int postId, int userId) {
@@ -95,6 +96,45 @@ public class PostBO {
 		
 		// db 삭제
 		return postMapper.deletePostByPostIdUserId(postId, userId);
+	}
+	
+	public List<Post> getPostListByuserId(int userId, Integer prevId, Integer nextId){
+		// 게시글 번호 : 10 9 8 | 7 6 5 | 4 3 2 | 1
+		// 만약 4 3 2 페이지 있을 때
+		// 1) 다음: 2보다 작은 3개 DESC
+		// 2) 이전: 4보다 큰 3개 ASC(5 6 7) => List reverse(7 6 5)
+		
+		// 3) 만약 첫 페이지일 때(이전, 다음 없음) DESC 3개
+		String direction = null;	// 방향
+		Integer standardId = null;	// 기준 postId
+		if(prevId != null) {	// 이전
+			direction = "prev";
+			standardId = prevId;
+			
+			List<Post> postList = postMapper.selectPostListByUserId(userId, direction, standardId, POST_MAX_SIZE);
+			// 가져온 리스트를 뒤집는다. 5 6 7 => 7 6 5
+			Collections.reverse(postList);	// void로 돌려주기 때문에 저장까지 해준다.
+			
+			// return 결과 => 메소드 종료
+			return postList;
+		}else if(nextId != null) {
+			direction = "next";
+			standardId = nextId; 
+		}
+		
+		
+		return postMapper.selectPostListByUserId(userId, direction, standardId, POST_MAX_SIZE);
+	}
+	
+	// 이전 방향의 끝인지 확인
+	public boolean isPrevLastPage(int userId, int prevId) {
+		int postId = postMapper.selectPostIdByUserIdSort(userId, "DESC");
+		return postId == prevId;	// 같으면 끝이고 아니면 끝 아님
+	}
+	
+	// 다음 방향의 끝인지 확인
+	public boolean isNextLastPage(int userId, int nextId) {
+		return nextId == postMapper.selectPostIdByUserIdSort(userId, "ASC");
 	}
 	
 }

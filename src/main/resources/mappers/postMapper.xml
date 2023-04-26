@@ -23,7 +23,7 @@
  			, NOW()
  		)
  	</insert>
- 	<select id="selectPostList" resultType="com.memo.post.model.Post">
+ 	<select id="selectPostListByUserId" parameterType="map" resultType="com.memo.post.model.Post">
  		SELECT 
  			`id`
  			, `userId`
@@ -34,8 +34,24 @@
  			, `updatedAt`
  		FROM
  			`post`
- 		ORDER BY 
- 			`id` DESC
+ 		WHERE
+ 			`userId` = #{userId}
+ 			<if test="direction == null">
+ 			ORDER BY `id` DESC
+ 			</if>
+ 			<if test="direction == 'next'">
+ 			<![CDATA[
+ 			AND `id` < #{standardId}
+ 			]]>
+ 			ORDER BY `id` DESC
+ 			</if>
+ 			<if test="direction == 'prev'">
+ 			<![CDATA[
+ 			AND `id` > #{standardId} 
+ 			]]>
+ 			</if>
+ 		<!-- #대신 $으로 해주면 ''를 없애준다. -->
+ 		LIMIT ${limit}
  	</select>
  	<select id="getPostBypostIdUserId" parameterType="map" resultType="com.memo.post.model.Post">
  			SELECT 
@@ -64,7 +80,6 @@
  			<if test= "imagePath != null">
  			, `imagePath` = #{imagePath}
  			</if>
- 			
  		WHERE
  			`id` = #{postId}
  	</update>
@@ -77,4 +92,16 @@
  		AND
  			`userId` = #{userId}
  	</delete>
+ 	
+ 	<select id="selectPostIdByUserIdSort" parameterType="map" resultType="int">
+ 		SELECT
+ 			`id`
+ 		FROM
+ 			`post`
+ 		WHERE
+ 			`userId` = #{userId}
+ 		ORDER BY `id` ${sort}
+ 		LIMIT 1
+ 		
+ 	</select>
  </mapper>
